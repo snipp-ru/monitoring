@@ -51,7 +51,15 @@ foreach ($domains as $domain) {
 foreach ($certificates as $domain) {
 	$date = 0;
 	$url = 'ssl://' . $domain . ':443';
-	$context = stream_context_create(array('ssl' => array('capture_peer_cert' => true)));
+	$context = stream_context_create(
+		array(
+			'ssl' => array(
+				'capture_peer_cert' => true,
+				'verify_peer' => false,
+				'verify_peer_name' => false
+			)
+		)
+	);
 
 	$fp = @stream_socket_client($url, $err_no, $err_str, 30, STREAM_CLIENT_CONNECT, $context);
 	$cert = @stream_context_get_params($fp);
